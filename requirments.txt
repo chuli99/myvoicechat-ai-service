@@ -1,0 +1,4 @@
+fastapi
+uvicorn
+f5-tts
+pydantic-settings
