@@ -1,11 +1,14 @@
 import subprocess
 import uuid
+import time
 from pathlib import Path
 
 #importo la configuracion global
 from core.config import settings
 
 def generate_tts(request) -> dict:
+    start_time = time.time()
+    
     output_dir = Path("tts_outputs") / uuid.uuid4().hex
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -20,10 +23,14 @@ def generate_tts(request) -> dict:
 
     proc = subprocess.run(cmd, capture_output=True, text=True)
     files = [str(p) for p in output_dir.glob("*")]
+    
+    end_time = time.time()
+    response_time = round(end_time - start_time, 2)  # Redondear a 2 decimales
 
     return{
         "stdout": proc.stdout,
         "stderr": proc.stderr,
         "returncode": proc.returncode,
-        "output_files": files
+        "output_files": files,
+        "response_time": response_time
     }

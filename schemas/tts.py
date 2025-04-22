@@ -11,3 +11,4 @@ class TTSResponse(BaseModel):
     stderr: str
     returncode: int
     output_files: list[str]
+    response_time: float = Field(..., description="Tiempo de respuesta en segundos")
