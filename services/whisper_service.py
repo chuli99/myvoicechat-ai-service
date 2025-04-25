@@ -31,7 +31,7 @@ def transcribe_audio(request) -> dict:
             "response_time": round(time.time() - start_time, 2)
         }
     
-    # Cargar el modelo r
+    # Cargar el modelo 
     model = get_whisper_model()
     
     # Transcripcion

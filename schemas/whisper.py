@@ -5,4 +5,4 @@ class WhisperRequest(BaseModel):
 
 class WhisperResponse(BaseModel):
     text: str = Field(..., description="Texto transcrito del audio")
-    response_time: float = Field(..., description="Tiempo de respuesta en segundos")
+    response_time: float = Field(..., description="Tiempo de respuesta")
