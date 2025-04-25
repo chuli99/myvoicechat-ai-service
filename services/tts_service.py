@@ -6,31 +6,24 @@ import sys
 from contextlib import redirect_stdout, redirect_stderr
 import inspect
 
-# Importamos la API de F5TTS
 from f5_tts.api import F5TTS
 
-# Importo la configuración global
 from core.config import settings
 
-# Creamos una instancia singleton de F5TTS para reutilizarla entre llamadas
 _f5tts_instance = None
 
 def get_f5tts_instance():
-    """Obtiene o crea la instancia de F5TTS (singleton)"""
     global _f5tts_instance
     if _f5tts_instance is None:
-        # Inicializamos F5TTS sin argumentos
         _f5tts_instance = F5TTS()
     return _f5tts_instance
 
 def generate_tts(request) -> dict:
-    """Genera audio TTS usando directamente la API de F5TTS"""
     start_time = time.time()
     
-    # Obtener la instancia de F5TTS (cargada una sola vez)
     api = get_f5tts_instance()
     
-    # Crear directorio para los archivos de salida
+    #Directorio para los archivos de salida
     output_dir = Path("tts_outputs") / uuid.uuid4().hex
     output_dir.mkdir(parents=True, exist_ok=True)
     output_file = output_dir / "infer_cli_basic.wav"
