@@ -3,3 +3,6 @@ uvicorn
 f5-tts
 pydantic-settings
 whisper
+transformers
+sentencepiece
+torch
