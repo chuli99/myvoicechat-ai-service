@@ -11,16 +11,28 @@ from f5_tts.api import F5TTS
 from core.config import settings
 
 _f5tts_instance = None
+_is_preloaded = False  # Nueva bandera para indicar si el modelo fue precargado
 
-def get_f5tts_instance():
-    global _f5tts_instance
-    if _f5tts_instance is None:
-        _f5tts_instance = F5TTS()
+def get_tts(force_load=False):
+    global _f5tts_instance, _is_preloaded
+    
+    # Si la instancia ya está creada y no se fuerza una recarga, solo la devolvemos
+    if _f5tts_instance is not None and not force_load:
+        return _f5tts_instance
+    
+    print("Inicializando modelo F5TTS...")
+    _f5tts_instance = F5TTS()
+    _is_preloaded = True
     return _f5tts_instance
+
+# Mantenemos get_f5tts_instance para compatibilidad
+def get_f5tts_instance():
+    return get_tts()
 
 def generate_tts(request) -> dict:
     start_time = time.time()
     
+    # Obtener la instancia (no se recargará si ya está cargada)
     api = get_f5tts_instance()
     
     #Directorio para los archivos de salida
