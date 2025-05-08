@@ -1,13 +1,13 @@
 from fastapi import APIRouter, HTTPException
-from schemas.unified import UnifiedTranslationRequest, UnifiedTranslationResponse
-from services.unified_service import process_unified_translation
+from schemas.audio_translation import TranslateAudioRequest, TranslateAudioResponse
+from services.audio_translation_service import process_audio_translation
 
-router = APIRouter(prefix="/unified", tags=["unified"])
+router = APIRouter(prefix="/translate-audio", tags=["audio-translation"])
 
-@router.post("/translate-audio", response_model=UnifiedTranslationResponse)
-async def unified_translation_endpoint(payload: UnifiedTranslationRequest):
+@router.post("/", response_model=TranslateAudioResponse)
+async def translate_audio_endpoint(payload: TranslateAudioRequest):
     """
-    Endpoint unificado que realiza el proceso completo:
+    Endpoint que realiza el proceso completo:
     1. Transcribe el audio de entrada (Whisper)
     2. Traduce el texto transcrito (M2M100)
     3. Genera un audio con la traducción (F5TTS)
@@ -15,7 +15,7 @@ async def unified_translation_endpoint(payload: UnifiedTranslationRequest):
     El resultado incluye todos los textos generados y tiempos de procesamiento.
     """
     try:
-        result = process_unified_translation(payload)
+        result = process_audio_translation(payload)
         
         # Verificar si hubo un error en el procesamiento
         if "error" in result:
@@ -26,5 +26,5 @@ async def unified_translation_endpoint(payload: UnifiedTranslationRequest):
         # Capturar cualquier excepción no controlada
         raise HTTPException(
             status_code=500, 
-            detail=f"Error en el proceso unificado: {str(e)}"
+            detail=f"Error en el proceso de traducción de audio: {str(e)}"
         )

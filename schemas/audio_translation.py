@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 
-class UnifiedTranslationRequest(BaseModel):
+class TranslateAudioRequest(BaseModel):
     """
     Solicitud para el proceso unificado de transcripción, traducción y síntesis de voz.
     """
@@ -15,9 +15,9 @@ class UnifiedTranslationRequest(BaseModel):
     model: str = Field("F5TTS_v1_Base", example="F5TTS_v1_Base", 
                       description="Modelo TTS a utilizar")
 
-class UnifiedTranslationResponse(BaseModel):
+class TranslateAudioResponse(BaseModel):
     """
-    Respuesta del proceso unificado con todos los detalles del proceso.
+    Respuesta del proceso de traducción de audio con todos los detalles del proceso.
     """
     # Información del audio original
     original_audio_path: str = Field(..., description="Ruta del archivo de audio original")

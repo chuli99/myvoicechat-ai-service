@@ -13,12 +13,12 @@ class WhisperRequest:
     def __init__(self, audio_path: str):
         self.audio_path = audio_path
 
-def process_unified_translation(request) -> Dict[str, Any]:
+def process_audio_translation(request) -> Dict[str, Any]:
     """
     Procesa un flujo completo: transcripción (Whisper) → traducción (M2M100) → síntesis de voz (F5TTS)
     
     Args:
-        request: La solicitud unificada con todos los parámetros necesarios
+        request: La solicitud con todos los parámetros necesarios
         
     Returns:
         Un diccionario con todos los resultados del proceso
@@ -95,31 +95,34 @@ def process_unified_translation(request) -> Dict[str, Any]:
     
     # Almacenar resultados de la traducción
     result["translated_text"] = translated_text
-    formatted_text = translated_text.strip()
     result["translation_time"] = round(translation_time, 2)
     
     # 3. PASO TRES: SÍNTESIS DE VOZ con F5TTS
     print(f"🔊 Generando audio con la traducción")
     tts_start = time.time()
     
+    # Primero, transcribir el audio de referencia para obtener un texto de referencia adecuado
+    print(f"📝 Transcribiendo audio de referencia para obtener texto de referencia...")
+    reference_transcription = whisper_model.transcribe(str(voice_reference_path), fp16=False)
+    reference_text = reference_transcription["text"]
+    print(f"✅ Texto de referencia obtenido: {reference_text[:50]}...")
+    
     # Obtener instancia TTS
     tts = get_tts()
     
     # Crear directorio único para la salida
-    output_dir = Path("unified_outputs") / uuid.uuid4().hex
+    output_dir = Path("translate_audio_outputs") / uuid.uuid4().hex
     output_dir.mkdir(parents=True, exist_ok=True)
     output_file = output_dir / "translated_audio.wav"
     
     # Generar síntesis de voz:
-    # - Usa el texto transcrito como referencia (ref_text)
+    # - Usa el texto transcrito del audio de referencia como ref_text
     # - Usa el texto traducido como texto a generar (gen_text)
     try:
-        print(translated_text)
         tts.infer(
             ref_file=str(voice_reference_path),
-            ref_text=transcribed_text,  # Texto transcrito como referencia
-            gen_text=formatted_text,   # Texto traducido para generar
-            speed=0.8,
+            ref_text=reference_text,  # Texto transcrito del audio de referencia
+            gen_text=translated_text,  # Texto traducido para generar
             file_wave=str(output_file)
         )
     except Exception as e:
@@ -138,11 +141,12 @@ def process_unified_translation(request) -> Dict[str, Any]:
     # Almacenar resultados de la síntesis
     result["output_audio_path"] = str(output_file)
     result["tts_time"] = round(tts_time, 2)
+    result["reference_text"] = reference_text  # Añadir el texto de referencia a la respuesta
     
     # Calcular tiempo total
     total_time = time.time() - total_start_time
     result["total_time"] = round(total_time, 2)
     
-    print(f"✅ Proceso unificado completado en {total_time:.2f}s")
+    print(f"✅ Proceso de traducción de audio completado en {total_time:.2f}s")
     
     return result

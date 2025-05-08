@@ -51,7 +51,8 @@ def generate_tts(request) -> dict:
             api.infer(
                 ref_file=request.ref_audio_path,  
                 ref_text=request.ref_text,         
-                gen_text=request.gen_text,        
+                gen_text=request.gen_text,
+                speed=0.8,        
                 file_wave=str(output_file)        
             )
     except Exception as e:
