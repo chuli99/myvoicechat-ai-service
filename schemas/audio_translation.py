@@ -20,7 +20,7 @@ class TranslateAudioResponse(BaseModel):
     Respuesta del proceso de traducción de audio con todos los detalles del proceso.
     """
     # Información del audio original
-    original_audio_path: str = Field(..., description="Ruta del archivo de audio original")
+    original_audio_filename: str = Field(..., description="Nombre del archivo de audio original")
     
     # Resultados de la transcripción
     transcribed_text: str = Field(..., description="Texto transcrito del audio original")
@@ -34,6 +34,7 @@ class TranslateAudioResponse(BaseModel):
     
     # Resultados de la síntesis de voz
     output_audio_path: str = Field(..., description="Ruta del archivo de audio generado con la traducción")
+    reference_text: str = Field(..., description="Texto de referencia extraído del audio de referencia")
     tts_time: float = Field(..., description="Tiempo de síntesis de voz en segundos")
     
     # Información general
