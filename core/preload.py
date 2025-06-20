@@ -30,14 +30,14 @@ def preload_all_models():
     except Exception as e:
         print(f"❌ Error al cargar el modelo M2M100: {str(e)}")
     
-    # Precarga el modelo F5TTS
-    print("Precargando modelo F5TTS...")
+    # Precarga los modelos F5TTS
+    print("Precargando modelos F5TTS...")
     try:
-        from services.tts_service import get_tts
-        tts = get_tts(force_load=True)
-        print(f"✅ Modelo F5TTS cargado correctamente")
+        from services.tts_service import preload_all_models
+        preload_all_models()
+        print(f"✅ Modelos F5TTS cargados correctamente")
     except Exception as e:
-        print(f"❌ Error al cargar el modelo F5TTS: {str(e)}")
+        print(f"❌ Error al cargar los modelos F5TTS: {str(e)}")
     
     total_time = time.time() - start_time
     print(f"✅ Precarga de todos los modelos completada en {total_time:.2f} segundos")

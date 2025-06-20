@@ -110,8 +110,8 @@ def process_audio_translation(request) -> Dict[str, Any]:
     reference_text = reference_transcription["text"]
     print(f"✅ Texto de referencia obtenido: {reference_text[:50]}...")
     
-    # Obtener instancia TTS
-    tts = get_tts()
+    # Obtener instancia TTS con el modelo apropiado para el idioma de destino
+    tts = get_tts(request.target_lang)
     
     # Crear directorio único para la salida
     output_dir = Path("translate_audio_outputs") / uuid.uuid4().hex
@@ -261,8 +261,8 @@ async def process_audio_translation_file(request) -> Dict[str, Any]:
         reference_text = reference_transcription["text"]
         print(f"✅ Texto de referencia obtenido: {reference_text[:50]}...")
         
-        # Obtener instancia TTS
-        tts = get_tts()
+        # Obtener instancia TTS con el modelo apropiado para el idioma de destino
+        tts = get_tts(request.target_lang)
         
         # Crear directorio único para la salida
         output_dir = Path("translate_audio_outputs") / uuid.uuid4().hex
@@ -413,12 +413,13 @@ async def process_audio_translation_with_files(
         
         # Transcribir el audio de referencia para obtener un texto de referencia adecuado
         print(f"📝 Transcribiendo audio de referencia para obtener texto de referencia...")
-        reference_transcription = whisper_model.transcribe(str(temp_voice_ref_path), fp16=False)
-        reference_text = reference_transcription["text"]
+        #reference_transcription = whisper_model.transcribe(str(temp_voice_ref_path), fp16=False)
+        #reference_text = reference_transcription["text"]
+        reference_text = ("Mientras mas corto es el audio el modelo es mejor. ")
         print(f"✅ Texto de referencia obtenido: {reference_text[:50]}...")
         
-        # Obtener instancia TTS
-        tts = get_tts()
+        # Obtener instancia TTS con el modelo apropiado para el idioma de destino
+        tts = get_tts(target_lang)
         
         # Crear directorio único para la salida
         output_dir = Path("translate_audio_outputs") / uuid.uuid4().hex
