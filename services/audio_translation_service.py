@@ -111,7 +111,12 @@ def process_audio_translation(request) -> Dict[str, Any]:
     print(f"✅ Texto de referencia obtenido: {reference_text[:50]}...")
     
     # Obtener instancia TTS con el modelo apropiado para el idioma de destino
+    print(f"🎯 Cargando modelo TTS para idioma de destino: {request.target_lang}")
     tts = get_tts(request.target_lang)
+    
+    # Mensaje informativo sobre el modelo cargado
+    model_name = "F5TTS_Spanish" if request.target_lang == "es" else "F5TTS_Base"
+    print(f"✅ Modelo TTS cargado: {model_name} para idioma {request.target_lang}")
     
     # Crear directorio único para la salida
     output_dir = Path("translate_audio_outputs") / uuid.uuid4().hex
@@ -262,7 +267,12 @@ async def process_audio_translation_file(request) -> Dict[str, Any]:
         print(f"✅ Texto de referencia obtenido: {reference_text[:50]}...")
         
         # Obtener instancia TTS con el modelo apropiado para el idioma de destino
+        print(f"🎯 Cargando modelo TTS para idioma de destino: {request.target_lang}")
         tts = get_tts(request.target_lang)
+        
+        # Mensaje informativo sobre el modelo cargado
+        model_name = "F5TTS_Spanish" if request.target_lang == "es" else "F5TTS_Base"
+        print(f"✅ Modelo TTS cargado: {model_name} para idioma {request.target_lang}")
         
         # Crear directorio único para la salida
         output_dir = Path("translate_audio_outputs") / uuid.uuid4().hex
@@ -419,7 +429,12 @@ async def process_audio_translation_with_files(
         print(f"✅ Texto de referencia obtenido: {reference_text[:50]}...")
         
         # Obtener instancia TTS con el modelo apropiado para el idioma de destino
+        print(f"🎯 Cargando modelo TTS para idioma de destino: {target_lang}")
         tts = get_tts(target_lang)
+        
+        # Mensaje informativo sobre el modelo cargado
+        model_name = "F5TTS_Spanish" if target_lang == "es" else "F5TTS_Base"
+        print(f"✅ Modelo TTS cargado: {model_name} para idioma {target_lang}")
         
         # Crear directorio único para la salida
         output_dir = Path("translate_audio_outputs") / uuid.uuid4().hex
